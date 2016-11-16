@@ -16,23 +16,12 @@
     ons.ready(function() {
       console.log("Onsen UI is ready!");
     });
-
-    document.addEventListener('show', function(event) {
-      var page = event.target;
-      var titleElement = document.querySelector('#toolbar-title');
-
-      if (page.matches('#first-page')) {
-        titleElement.innerHTML = 'ThinkStacks';
-      } else if (page.matches('#second-page')) {
-        titleElement.innerHTML = 'ThinkStacks';
-      }
-    });
   </script>
 </head>
 <body>
   <ons-page>
     <ons-toolbar>
-      <div class="center" id="toolbar-title"></div>
+      <div class="center"></div>
     </ons-toolbar>
     <ons-tabbar position="auto" id="tab">
       <ons-tab label="Tab 1" page="tab1.html" active>

@@ -6,23 +6,32 @@ var ncmb = new NCMB("c578c67b1aa7a69c072b8f090e29e7e64ce17ebb7383d54bc3dd2c26c14
 function saveMemo (memo) {
 // 保存先クラスを作成
 var MemoData = ncmb.DataStore("MemoData");
-// クラスインスタンスを生成
-var memoData = new MemoData();
-// 値を設定
-memoData.set("memo", memo);
-// 保存を実施
-memoData.save()
-         .then(function (){
-             // 保存に成功した場合の処理
-             console.log("Save OK!");
-         })
-         .catch(function (error){
-             // 保存に失敗した場合の処理
-             console.log("Not Save ! error:" + error); 
-         });
+    MemoData.count()
+            .fetchAll()
+            .then(function(results){
+                console.log(results.count); // 検索結果の件数を表示
+                // クラスインスタンスを生成
+                var memoData = new MemoData();
+                // 値を設定
+                memoData.set("memo", memo);
+                memoData.set("id",results.count);
+                // 保存を実施
+                memoData.save()
+                        .then(function (){
+                            // 保存に成功した場合の処理
+                            console.log("Save OK!");
+                        })
+                        .catch(function (error){
+                            // 保存に失敗した場合の処理
+                            console.log("Not Save ! error:" + error); 
+                        });
+            })
+            .catch(function(err){
+                console.log(err);
+            });
 }
 
-// 名前入力アラートの表示
+// メモを保存する。
 function imputMemo(){
     // 入力アラートを表示
     var memo = $('[name=memodesu]').val();
@@ -31,7 +40,7 @@ function imputMemo(){
     } else {      
         // メモを保存
         saveMemo(memo);
-        $("#amozan").html(memo + "を保存したよ。"); 
+        $("#amozan").html(memo + " を保存したよ。"); 
         $('[name=memodesu]').val(""); 
     }
 }
