@@ -19,7 +19,7 @@ var MemoData = ncmb.DataStore("MemoData");
                 // 値を設定
                 memoData.set("memo", memo);
                 // MemoDataの保存総数をidにセット
-                memoData.set("id",results.count);
+                memoData.set("memoid",results.count);
                 // 保存を実施
                 memoData.save()
                         .then(function (){
@@ -82,7 +82,7 @@ ons.ready(function() {
 function setData(array) {
     // テーブルを空にする
     $('table').empty();
-    // memoTableを取得
+    // memoTableを設定
     var table = document.getElementById("memoTable");
         //取得したデータの数だけ回す
         for (i=0; i<array.length; i++) {
@@ -94,3 +94,40 @@ function setData(array) {
             memo.innerHTML = array[i].memo;
         }   
 }
+
+// ランダムに保存したデータを表示する
+function randamsetData(){
+    //
+    var MemoData = ncmb.DataStore("MemoData");
+    // MemoDataの保存総数を取得
+    MemoData.count()
+            // MemoDataを検索
+            .fetchAll()
+            // 検索に成功した場合の処理
+            .then(function(results){
+                //乱数を生成する
+                var rand = Math.floor( Math.random() * results.length );
+                //
+                var MemoData = ncmb.DataStore("MemoData");
+                //
+                MemoData.equalTo("memoid", rand)
+                        //
+                        .fetchAll()
+                        //
+                        .then(function(results){
+                            //
+                            for (var i = 0; i < results.length; i++) {
+                                var object = results[i];
+                                console.log(object.get("memo"));
+                            }
+                            })
+                        .catch(function(err){
+                            console.log("Not Find" + err);
+                        });
+            })
+            .catch(function(err){
+                // 検索に失敗した場合の処理
+                console.log("Not Search" + err);
+            });
+}
+
