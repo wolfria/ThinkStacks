@@ -2,18 +2,23 @@
 var ncmb = new NCMB("c578c67b1aa7a69c072b8f090e29e7e64ce17ebb7383d54bc3dd2c26c14fa959"
 ,"83fed666f63307fb54f97622ae48e9c201498c36511cdda006b3d3ba3cb253fa");
 
-// 【mBaaS】データの保存
+// mBaaSへデータの保存
 function saveMemo (memo) {
 // 保存先クラスを作成
 var MemoData = ncmb.DataStore("MemoData");
+    // MemoDataの保存総数を取得
     MemoData.count()
+            // MemoDataを検索
             .fetchAll()
+            // 検索に成功した場合の処理
             .then(function(results){
-                console.log(results.count); // 検索結果の件数を表示
+                // 保存総数を表示
+                console.log(results.count);
                 // クラスインスタンスを生成
                 var memoData = new MemoData();
                 // 値を設定
                 memoData.set("memo", memo);
+                // MemoDataの保存総数をidにセット
                 memoData.set("id",results.count);
                 // 保存を実施
                 memoData.save()
@@ -21,31 +26,39 @@ var MemoData = ncmb.DataStore("MemoData");
                             // 保存に成功した場合の処理
                             console.log("Save OK!");
                         })
-                        .catch(function (error){
+                        .catch(function (err){
                             // 保存に失敗した場合の処理
-                            console.log("Not Save ! error:" + error); 
+                            console.log("Not Save ! error:" + err); 
                         });
             })
             .catch(function(err){
-                console.log(err);
+                // 検索に失敗した場合の処理
+                console.log("Not Search" + err);
             });
 }
 
 // メモを保存する。
 function imputMemo(){
-    // 入力アラートを表示
-    var memo = $('[name=memodesu]').val();
+    // inputの値を取得
+    var memo = $('[id=memodesu]').val();
+    // 取得した値が空だったら
     if (memo == null || memo == "") {
+        // キャンセルアラートを表示
         $("#list-page p").html("保存がキャンセルされました");
+    // 何か書き込まれていたら
     } else {      
         // メモを保存
         saveMemo(memo);
+        // pタグに書き込まれた内容を表示
         $("#amozan").html(memo + " を保存したよ。"); 
-        $('[name=memodesu]').val(""); 
+        // inputの値を空にする
+        $('[id=memodesu]').val(""); 
     }
 }
 
+// onsenUIのセットアップ完了後に動作
 ons.ready(function() {
+    // タブを開く前に更新
     document.getElementById('tab').addEventListener('prechange', function() {
         // 保存先クラスを作成
         var memodata = ncmb.DataStore("MemoData");
@@ -67,12 +80,17 @@ ons.ready(function() {
 
 // テーブルにデータを設定
 function setData(array) {
-   $('table').empty();
-   var table = document.getElementById("memoTable");
-    for (i=0; i<array.length; i++) {
-        $('table').append('<tr><td align="center" width="200"></td></tr>');
-        // 名前の設定
-        var memo = table.rows[i].cells[0];
-        memo.innerHTML = array[i].memo;
-    }   
+    // テーブルを空にする
+    $('table').empty();
+    // memoTableを取得
+    var table = document.getElementById("memoTable");
+        //取得したデータの数だけ回す
+        for (i=0; i<array.length; i++) {
+            //テーブルの末端に追加
+            $('table').append('<tr><td align="center" width="200"></td></tr>');
+            // 名前の設定
+            var memo = table.rows[i].cells[0];
+            // テーブルの書き換え
+            memo.innerHTML = array[i].memo;
+        }   
 }
