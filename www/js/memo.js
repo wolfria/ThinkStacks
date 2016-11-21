@@ -2,6 +2,21 @@
 var ncmb = new NCMB("c578c67b1aa7a69c072b8f090e29e7e64ce17ebb7383d54bc3dd2c26c14fa959"
 ,"83fed666f63307fb54f97622ae48e9c201498c36511cdda006b3d3ba3cb253fa");
 
+// メモを保存する。
+function imputMemo(){
+    // inputの値を取得
+    var memo = $('[id=output1]').val();
+    // 取得した値が空だったら
+    if (memo == null || memo == "") {
+        // キャンセルアラートを表示
+        $("#amozan").html("何か書いてね");
+    // 何か書き込まれていたら
+    } else {      
+        // メモを保存
+        saveMemo(memo);
+    }
+}
+
 // mBaaSへデータの保存
 function saveMemo (memo) {
 // 保存先クラスを作成
@@ -18,13 +33,15 @@ var MemoData = ncmb.DataStore("MemoData");
                 var memoData = new MemoData();
                 // 値を設定
                 memoData.set("memo", memo);
-                // MemoDataの保存総数をidにセット
-                memoData.set("memoid",results.count);
                 // 保存を実施
                 memoData.save()
                         .then(function (){
-                            // 保存に成功した場合の処理
-                            console.log("Save OK!");
+                            // pタグに書き込まれた内容を表示
+                            $("#amozan").html(memo + " を保存したよ。"); 
+                            $("#amozan").fadeOut(3000);
+                            // inputの値を空にする
+                            $("[id=output1]").val(""); 
+                            setTimeout();
                         })
                         .catch(function (err){
                             // 保存に失敗した場合の処理
@@ -33,27 +50,7 @@ var MemoData = ncmb.DataStore("MemoData");
             })
             .catch(function(err){
                 // 検索に失敗した場合の処理
-                console.log("Not Search" + err);
             });
-}
-
-// メモを保存する。
-function imputMemo(){
-    // inputの値を取得
-    var memo = $('[id=memodesu]').val();
-    // 取得した値が空だったら
-    if (memo == null || memo == "") {
-        // キャンセルアラートを表示
-        $("#list-page p").html("保存がキャンセルされました");
-    // 何か書き込まれていたら
-    } else {      
-        // メモを保存
-        saveMemo(memo);
-        // pタグに書き込まれた内容を表示
-        $("#amozan").html(memo + " を保存したよ。"); 
-        // inputの値を空にする
-        $('[id=memodesu]').val(""); 
-    }
 }
 
 // onsenUIのセットアップ完了後に動作
@@ -95,39 +92,37 @@ function setData(array) {
         }   
 }
 
-// ランダムに保存したデータを表示する
 function randamsetData(){
+    randamsetData1();
+    randamsetData2();
+}
+
+// ランダムに保存したデータを表示する
+function randamsetData1(){
     //
     var MemoData = ncmb.DataStore("MemoData");
-    // MemoDataの保存総数を取得
-    MemoData.count()
-            // MemoDataを検索
-            .fetchAll()
-            // 検索に成功した場合の処理
+    MemoData.fetchAll()
             .then(function(results){
-                //乱数を生成する
-                var rand = Math.floor( Math.random() * results.length );
+        		memonano = results[Math.floor(Math.random() * results.length)]
                 //
-                var MemoData = ncmb.DataStore("MemoData");
-                //
-                MemoData.equalTo("memoid", rand)
-                        //
-                        .fetchAll()
-                        //
-                        .then(function(results){
-                            //
-                            for (var i = 0; i < results.length; i++) {
-                                var object = results[i];
-                                console.log(object.get("memo"));
-                            }
-                            })
-                        .catch(function(err){
-                            console.log("Not Find" + err);
-                        });
+                $(".word1").text(memonano.get("memo"));
             })
             .catch(function(err){
-                // 検索に失敗した場合の処理
-                console.log("Not Search" + err);
+                console.log("Not Find" + err);
             });
 }
 
+// ランダムに保存したデータを表示する
+function randamsetData2(){
+    //
+    var MemoData = ncmb.DataStore("MemoData");
+    MemoData.fetchAll()
+            .then(function(results){
+        		memonano = results[Math.floor(Math.random() * results.length)]
+                //
+                $(".word2").text(memonano.get("memo"));
+            })
+            .catch(function(err){
+                console.log("Not Find" + err);
+            });
+}
