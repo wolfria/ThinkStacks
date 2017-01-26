@@ -15,15 +15,16 @@
 </head>
 <body>
   <ons-page>
-    <ons-toolbar>
-      <div class="center"></div>
-    </ons-toolbar>
     <ons-tabbar position="auto" id="tab">
       <ons-tab label="メモる" page="tab1.html" active>
       </ons-tab>
-      <ons-tab label="見る" page="tab2.html">
+      <ons-tab label="見る" page="Navi.html">
       </ons-tab>
     </ons-tabbar>
   </ons-page>
 </body>
 </html>
+
+<ons-template id="Navi.html">
+    <ons-navigator id="myNavigator" page="tab2.html"></ons-navigator>
+</ons-template>

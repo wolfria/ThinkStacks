@@ -17,6 +17,28 @@ function imputMemo(){
     }
 }
 
+//　
+function Mandarato(){
+    // inputの値を取得
+    var memo = $('[id=output1]').val();
+    // 取得した値が空だったら
+    if (memo == null || memo == "") {
+        // キャンセルアラートを表示
+        $("#amozan").html("何か書いてね");
+    // 何か書き込まれていたら
+    } else {
+        $.ajax({
+            type: 'GET',
+            url: 'https://api.apitore.com/api/8/word2vec-neologd-jawiki/distance?access_token=b8be493b-a34a-42d6-a5e8-7f606e3d13ee&word=' + memo + '&num=8'
+        }).then(function(data){
+                for(var i=0,l=8;i<l;i++){
+                var word = data.distances[i].word;
+                console.log(word);
+                }
+            })
+    }
+}
+
 // mBaaSへデータの保存
 function saveMemo (memo) {
 // 保存先クラスを作成
@@ -65,8 +87,13 @@ ons.ready(function() {
              .then(function(results){
                 // 検索に成功した場合の処理
                 console.log("検索に成功しました。");
-                // テーブルにデータをセット
-                setData(results);
+                // テーブルを空にする
+                $('ons-list').empty();
+                //取得したデータの数だけ回す
+                for (i=0; i<results.length; i++) {
+                    //テーブルの末端に追加
+                    $('ons-list').append('<ons-list-item id="memolist'+[i]+'" class="memolist" modifier="chevron" tappable>'+ results[i].memo +'</ons-list-item>');
+                }
               })
              .catch(function(error){
                 // 検索に失敗した場合の処理
@@ -75,52 +102,27 @@ ons.ready(function() {
     })
 });
 
-// テーブルにデータを設定
-function setData(array) {
-    // テーブルを空にする
-    $('table').empty();
-    // memoTableを設定
-    var table = document.getElementById("memoTable");
-        //取得したデータの数だけ回す
-        for (i=0; i<array.length; i++) {
-            //テーブルの末端に追加
-            $('table').append('<tr><td align="center" width="200"></td></tr>');
-            // 名前の設定
-            var memo = table.rows[i].cells[0];
-            // テーブルの書き換え
-            memo.innerHTML = array[i].memo;
-        }   
-}
+$(document).on('click', '.memolist', function(){
+    // clickイベントで発動する処理
+    var id = $(this).attr("id");
+    document.querySelector('#myNavigator').pushPage('katuyou.html');
+    console.log(idname);
+});
 
+// ランダムに保存したデータを表示する
 function randamsetData(){
-    randamsetData1();
-    randamsetData2();
-}
-
-// ランダムに保存したデータを表示する
-function randamsetData1(){
     //
     var MemoData = ncmb.DataStore("MemoData");
     MemoData.fetchAll()
             .then(function(results){
-        		memonano = results[Math.floor(Math.random() * results.length)]
+        		memonano1 = results[Math.floor(Math.random() * results.length)]
+            	memonano2 = results[Math.floor(Math.random() * results.length)]
+                while( memonano1 == memonano2 ){
+                    memonano2 = Math.floor(Math.random() * results.length);
+                }
                 //
-                $(".word1").text(memonano.get("memo"));
-            })
-            .catch(function(err){
-                console.log("Not Find" + err);
-            });
-}
-
-// ランダムに保存したデータを表示する
-function randamsetData2(){
-    //
-    var MemoData = ncmb.DataStore("MemoData");
-    MemoData.fetchAll()
-            .then(function(results){
-        		memonano = results[Math.floor(Math.random() * results.length)]
-                //
-                $(".word2").text(memonano.get("memo"));
+                $(".word1").text(memonano1.get("memo"));
+                $(".word2").text(memonano2.get("memo"));
             })
             .catch(function(err){
                 console.log("Not Find" + err);
