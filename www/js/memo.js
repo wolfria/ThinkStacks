@@ -16,38 +16,6 @@ function imputMemo() {
     }
 }
 
-//　
-function Mandarato() {
-    // inputの値を取得
-    var memo = $('[id=output1]').val();
-    // 取得した値が空だったら
-    if (memo == null || memo == "") {
-        // キャンセルアラートを表示
-        $("#amozan").html("何か書いてね");
-        // 何か書き込まれていたら
-    } else {
-        $.ajax({
-            type: 'GET',
-            url: 'https://api.apitore.com/api/8/word2vec-neologd-jawiki/distance?access_token=b8be493b-a34a-42d6-a5e8-7f606e3d13ee&word=' + memo + '&num=8'
-        }).then(function(data) {
-            for (var i = 0, l = 8; i < l; i++) {
-                var word = data.distances[i].word;
-                console.log(word);
-                $.ajax({
-                    type: 'GET',
-                    url: 'https://api.apitore.com/api/8/word2vec-neologd-jawiki/distance?access_token=b8be493b-a34a-42d6-a5e8-7f606e3d13ee&word=' + word + '&num=8'
-                }).then(function(data) {
-                    for (var i = 0, l = 8; i < l; i++) {
-                        var word2 = data.distances[i].word;
-                        console.log(word2);
-                    }
-                    console.log("---");
-                })
-            }
-        })
-    }
-}
-
 // mBaaSへデータの保存
 function saveMemo(memo) {
     // 保存先クラスを作成
@@ -59,7 +27,7 @@ function saveMemo(memo) {
         // 検索に成功した場合の処理
         .then(function(results) {
             // 保存総数を表示
-            console.log(results.count);
+            //console.log(results.count);
             // クラスインスタンスを生成
             var memoData = new MemoData();
             // 値を設定
@@ -68,7 +36,7 @@ function saveMemo(memo) {
             memoData.save()
                 .then(function() {
                     // pタグに書き込まれた内容を表示
-                    $("#amozan").html(memo + " を保存したよ。");
+                    $("#amozan").text(memo + " を保存したよ。");
                     $("#amozan").fadeOut(3000);
                     // inputの値を空にする
                     $("[id=output1]").val("");
@@ -95,7 +63,6 @@ ons.ready(function() {
             .fetchAll()
             .then(function(results) {
                 // 検索に成功した場合の処理
-                console.log("検索に成功しました。");
                 // リストを空にする
                 $('ons-list').empty();
                 //取得したデータの数だけ回す
@@ -113,7 +80,6 @@ ons.ready(function() {
 
 $(document).on('change', '.oyayososwitch', function(event) {
     // clickイベントで発動する処理
-    console.log(this.checked);
     var oya = $(this).closest("ons-list-item");
     var id = $(oya).attr("id");
     var memoname = $(oya).text();
@@ -126,15 +92,14 @@ $(document).on('change', '.oyayososwitch', function(event) {
             var item = "";
             for (var i = 0, l = 8; i < l; i++) {
                 var word = data.distances[i].word;
-                console.log(word);
-                var item = item + '<ons-list-item id="koyoso' + [i] + '" class="koyoso">' + ' ○ ' + word + '<div class="right"><ons-switch class="koyoso koyososwitch"></ons-switch></div></ons-list-item>';
+                var item = item + '<ons-list-item id="koyoso'+[i]+'" class="koyoso '+ id +'">' + ' ・ ' + word + '<div class="right"><ons-switch class="koyoso koyososwitch '+ id +'"></ons-switch></div></ons-list-item>';
             }
             $("#" + id).after(item);
         }).error(function(data) {
             alert('error!!!');
         });
     } else {
-        $(".koyoso").hide();
+        $("."+id).hide();
     }
 });
 
@@ -142,11 +107,9 @@ $(document).on('change', '.koyososwitch', function(event) {
     // clickイベントで発動する処理
     var ko = $(this).closest("ons-list-item");
     var id = $(ko).attr("id");
-    console.log(id);
     var memoname = $(ko).text();
     var memoname = memoname.slice(3);
     var memoname = memoname.substring(0, memoname.indexOf(" "));
-    console.log(memoname);
     if (this.checked == true) {
         $.ajax({
             type: 'GET',
@@ -155,15 +118,14 @@ $(document).on('change', '.koyososwitch', function(event) {
             var item = "";
             for (var i = 0, l = 8; i < l; i++) {
                 var word = data.distances[i].word;
-                console.log(word);
-                var item = item + '<ons-list-item class="magoyoso" modifier="nodivider" tappable>' + ' ○ ○ ' + word + '</ons-list-item>';
+                var item = item + '<ons-list-item class="magoyoso '+ id +'" modifier="nodivider" tappable>' + ' ・・ ' + word + '</ons-list-item>';
             }
             $("#" + id).after(item);
         }).error(function(data) {
             alert('error!!!');
         });
     }else{
-      $(".magoyoso").hide();
+      $("."+id).hide();
     }
 });
 
@@ -179,8 +141,8 @@ function randamsetData() {
                 memonano2 = Math.floor(Math.random() * results.length);
             }
             //
-            $(".word1").text(memonano1.get("memo"));
-            $(".word2").text(memonano2.get("memo"));
+            console.log();
+            $('#word1').attr('placeholder','お名前');
         })
         .catch(function(err) {
             console.log("Not Find" + err);

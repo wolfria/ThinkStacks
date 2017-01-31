@@ -2,7 +2,7 @@
     background-image:url('..//img/titlelogo.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 36%;
+    background-size: contain;
 }
 
 .memonano{
@@ -13,6 +13,20 @@
 }
 
 #output1{
-    margin: 20px auto;
+    margin: 10px auto;
     width: 98%;
+}
+
+#output2{
+    margin: 10px auto;
+    width: 98%;
+}
+
+#kakezan{
+  margin: 10px auto;
+  padding: 0;
+}
+
+#kakeru{
+  margin: 10px auto;
 }
