@@ -135,14 +135,13 @@ function randamsetData() {
     var MemoData = ncmb.DataStore("MemoData");
     MemoData.fetchAll()
         .then(function(results) {
-            memonano1 = results[Math.floor(Math.random() * results.length)]
-            memonano2 = results[Math.floor(Math.random() * results.length)]
+            memonano1 = results[Math.floor(Math.random() * results.length)].memo;
+            memonano2 = results[Math.floor(Math.random() * results.length)].memo;
             while (memonano1 == memonano2) {
-                memonano2 = Math.floor(Math.random() * results.length);
+                memonano2 = results[Math.floor(Math.random() * results.length)].memo;
             }
-            //
-            console.log();
-            $('#word1').attr('placeholder','お名前');
+            $('#word1').val(memonano1);
+            $('#word2').val(memonano2);
         })
         .catch(function(err) {
             console.log("Not Find" + err);
