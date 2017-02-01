@@ -2,31 +2,45 @@
     background-image:url('..//img/titlelogo.svg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: 36%;
 }
 
 .memonano{
     display: block;
     margin: auto;
     text-align: center;
-    width: 98%;
+    width: 90%;
+    margin: 10px auto;
+}
+
+#kakezan{
+  margin: 15px auto;
+  padding: 0;
 }
 
 #output1{
     margin: 10px auto;
-    width: 98%;
+    width: 90%;
 }
 
 #output2{
     margin: 10px auto;
-    width: 98%;
-}
-
-#kakezan{
-  margin: 10px auto;
-  padding: 0;
+    width: 90%;
 }
 
 #kakeru{
-  margin: 10px auto;
+  margin: 7px auto;
+}
+
+input{
+  text-align: center;
+}
+
+#word1{
+  width: 90%;
+  padding: 0;
+}
+
+#word2{
+  width: 90%;
 }
