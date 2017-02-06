@@ -1,10 +1,9 @@
 #toolbar{
     background-image:url('..//img/titlelogo.svg');
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 36%;
+    background-position: bottom;;
+    background-size: 35%;
 }
-
 .memonano{
     display: block;
     margin: auto;
@@ -12,35 +11,24 @@
     width: 90%;
     margin: 10px auto;
 }
-
-#kakezan{
-  margin: 15px auto;
-  padding: 0;
+.kakezan{
+  margin: 10px auto;
+  width: 90%;
 }
-
 #output1{
     margin: 10px auto;
     width: 90%;
 }
-
 #output2{
     margin: 10px auto;
     width: 90%;
 }
-
 #kakeru{
   margin: 7px auto;
 }
-
 input{
   text-align: center;
 }
-
-#word1{
-  width: 90%;
-  padding: 0;
-}
-
-#word2{
-  width: 90%;
+#randambutton2{
+  margin: 10px auto;
 }
